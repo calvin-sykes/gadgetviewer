@@ -1372,6 +1372,7 @@ contains
           call gui_set_sensitive(species_checkbox(i),.TRUE.)
        end do
        call main_window_set_snapshot()
+       call main_window_set_title()
     endif
     
     call gui_set_sensitive(combo_box,       data_loaded)
@@ -1516,6 +1517,28 @@ contains
     return
   end subroutine main_window_set_snapshot
 
+
+  subroutine main_window_set_title()
+   !
+   ! Set the window title based on the loaded snapshot file name
+   !
+      implicit none
+      character(len=maxlen) :: fname
+   
+      if(particle_store_loaded(pdata))then
+        call particle_store_contents(pdata, get_filename=fname)
+      else
+        fname = ""
+      endif
+   
+      if(fname.ne."") then
+        call gui_window_set_title(mainwin, trim(fname)//" - Gadget File Viewer")
+      else
+        call gui_window_set_title(mainwin, "Gadget File Viewer")
+      endif
+   
+      return
+  end subroutine main_window_set_title
 
   subroutine main_window_update()
 !

@@ -31,8 +31,9 @@ module particle_store
   ! Random sampling
   public :: particle_store_sample
 
-  ! Store snapnum and time variable
+  ! Store snapnum, filename and time variable
   public :: particle_store_set_snapnum
+  public :: particle_store_set_filename
   public :: particle_store_set_time
 
   ! Store size of IDs in the snapshots
@@ -125,6 +126,7 @@ module particle_store
   type pdata_type
      private
      integer :: isnap
+     character(len=maxlen) :: fname
      integer :: nspecies
      type(speciestype), dimension(maxspecies) :: species
      logical :: loaded
@@ -503,6 +505,7 @@ contains
     pdata%nspecies = 0
     pdata%loaded   = .false.
     pdata%isnap    = -1
+    pdata%fname    = "none"
     
     do i = 1, maxspecies, 1
        pdata%species(i)%np     = 0
@@ -542,7 +545,7 @@ contains
 ! loaded and how many there are of each type.
 !
   subroutine particle_store_contents(pdata, get_nspecies, get_np, &
-       get_species_names, get_fsample, get_isnap)
+       get_species_names, get_fsample, get_isnap, get_filename)
 
     implicit none
     ! Parameters
@@ -551,6 +554,7 @@ contains
     character(len=*), dimension(:), optional :: get_species_names
     real,                           optional :: get_fsample
     integer,                        optional :: get_isnap
+    character(len=*),               optional :: get_filename
     type (pdata_type) :: pdata
     ! Internal
     integer :: i
@@ -582,6 +586,11 @@ contains
     ! Snapshot number
     if(present(get_isnap))then
        get_isnap = pdata%isnap
+    endif
+
+    ! Base name of snapshot
+    if(present(get_filename))then
+      get_filename = pdata%fname
     endif
 
     return
@@ -1198,6 +1207,20 @@ contains
 
     return
   end subroutine particle_store_set_snapnum
+
+
+  subroutine particle_store_set_filename(pdata, fname)
+!
+! Record the base filename for a pdata object
+!
+    implicit None
+    type(pdata_type) :: pdata
+    character(len=*) :: fname
+
+    pdata%fname = trim(fname)
+
+    return
+  end subroutine particle_store_set_filename
 
 
   subroutine particle_store_set_time(pdata, time, redshift, expansion, &
