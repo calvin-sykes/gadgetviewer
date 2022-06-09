@@ -28,6 +28,7 @@ module f90_gui
 !   gui_destroy_window
 !   gui_window_closed
 !   gui_window_set_statusbar
+!   gui_window_set_title
 !
 ! Packing boxes: 
 !
@@ -1454,6 +1455,20 @@ contains
 
     return
   end subroutine gui_window_set_statusbar
+
+!
+! Set the title for a window
+!
+  subroutine gui_window_set_title(window, title)
+
+    implicit none
+    type (gui_window) :: window
+    character(len=*)  :: title
+
+    call setwindowtitle(window%ptr, trim(title)//char(0))
+
+    return
+  end subroutine
 
 !
 ! Add a menu to a window
