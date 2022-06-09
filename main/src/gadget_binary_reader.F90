@@ -1122,6 +1122,10 @@ contains
     call particle_store_set_time(pdata, real(time), real(redshift), real(time))
     call particle_store_set_boxsize(pdata, real(boxsize))
 
+    ! Record the base filename
+    call gadget_path_generate(isnap, 0, fname, path_data)
+    call particle_store_set_filename(pdata, fname)
+
     gadget_binary_read%success = .true.
 
     if(need_byteswap)then
