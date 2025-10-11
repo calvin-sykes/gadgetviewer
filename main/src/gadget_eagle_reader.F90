@@ -793,6 +793,11 @@ contains
 
     ! Finished!
     call close_snapshot(snap)
+
+    ! Record the base filename
+    call gadget_path_generate(isnap, 0, fname, path_data)
+    call particle_store_set_filename(pdata, fname)
+
     gadget_eagle_read%success = .true.
 
     ! Set redshift

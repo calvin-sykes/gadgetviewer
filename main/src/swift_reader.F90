@@ -911,6 +911,10 @@ contains
 
     call cleanup()
 
+    ! Record the base filename
+    call gadget_path_generate(isnap, 0, fname, path_data)
+    call particle_store_set_filename(pdata, fname)
+
     swift_read%success = .true.
 
 #else
